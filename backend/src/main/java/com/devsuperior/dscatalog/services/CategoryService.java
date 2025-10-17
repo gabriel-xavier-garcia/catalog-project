@@ -29,4 +29,24 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Id: " + id + " not found!"));
         return new CategoryDTO(dto);
     }
+
+    @Transactional
+    public CategoryDTO insert(CategoryDTO dto){
+        Category entity = new Category();
+        CopyDtoToEntity(dto,entity );
+        entity = repository.save(entity);
+        return new CategoryDTO(entity);
+    }
+
+    @Transactional
+    public CategoryDTO update(Long id, CategoryDTO dto){
+        Category entity = repository.getReferenceById(id);
+        CopyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new CategoryDTO(entity);
+    }
+
+    public static void CopyDtoToEntity(CategoryDTO dto,Category entity){
+        entity.setName(dto.getName());
+    }
 }
